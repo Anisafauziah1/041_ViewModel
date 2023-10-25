@@ -1,4 +1,4 @@
-package com.example.practicept5.ui.theme
+package com.example.practicept5
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
