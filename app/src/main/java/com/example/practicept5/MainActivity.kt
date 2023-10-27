@@ -4,6 +4,7 @@ package com.example.practicept5
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -34,8 +36,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -74,6 +78,11 @@ fun TampilLayout(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(20.dp)
         ) {
+            Row() {
+                Image(painter = painterResource(id = R.drawable.back), contentDescription = "", modifier = Modifier.size(40.dp))
+                Spacer(modifier = Modifier.padding(5.dp))
+                Text(text = "Register", fontSize = 40.sp, textAlign = TextAlign.Center)
+            }
             TampilForm()
         }
     }
@@ -85,6 +94,7 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
 
     var textNama by remember { mutableStateOf("")}
     var textTlp by remember { mutableStateOf("")}
+    var textemail by remember { mutableStateOf("")}
     var textAlmt by remember { mutableStateOf("")}
 
     val context = LocalContext.current
@@ -115,13 +125,47 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
         }
     )
 
+    OutlinedTextField(
+        value = textemail,
+        singleLine = true,
+        shape = MaterialTheme.shapes.large,
+        modifier = Modifier.fillMaxWidth(),
+        label = { Text(text = "Email") },
+        onValueChange = {
+            textemail = it
+        }
+    )
+
+    OutlinedTextField(
+        value = textAlmt,
+        singleLine = true,
+        shape = MaterialTheme.shapes.large,
+        modifier = Modifier.fillMaxWidth(),
+        label = { Text(text = "Alamat") },
+        onValueChange = {
+            textAlmt = it
+        }
+    )
+
     SelectJK(
         options = jenis.map{ id -> context.resources.getString(id)},
-        onSelectionChanged = { cobaViewModel.setjenisK(it) })
+        onSelectionChanged = { cobaViewModel.setjenisK(it)
+        }
+    )
+    OutlinedTextField(
+        value = textAlmt,
+        singleLine = true,
+        shape = MaterialTheme.shapes.large,
+        modifier = Modifier.fillMaxWidth(),
+        label = { Text(text = "Alamat") },
+        onValueChange = {
+            textAlmt = it
+        }
+    )
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = {
-            cobaViewModel.BacaData(textNama, textTlp, textAlmt, dataForm.sex)
+            cobaViewModel.BacaData(textNama, textTlp, textAlmt, dataForm.sex, textemail)
         }
     ) {
         Text(
@@ -131,11 +175,9 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
     }
     Spacer(modifier = Modifier.height(100.dp))
     TextHasil(
-        namanya = cobaViewModel.namaUsr,
-        teleponnya = cobaViewModel.noTelp,
         jenisnya = cobaViewModel.jenisKl,
-        alamatnya = cobaViewModel.alamat
-
+        alamatnya = cobaViewModel.alamat,
+        emailnya = cobaViewModel.email
     )
 }
 
@@ -164,14 +206,17 @@ fun SelectJK(
                         selectedValue = item
                         onSelectionChanged(item)
                 })
-                Text(item)
+                Text(
+                    text = "Jenis Kelamin"
+                )
             }
         }
     }
 }
 
+
 @Composable
-fun TextHasil(namanya: String, teleponnya: String, jenisnya: String, alamatnya: String){
+fun TextHasil(jenisnya: String, alamatnya: String, emailnya: String){
     ElevatedCard (
         elevation = CardDefaults.cardElevation(
         defaultElevation = 6.dp
@@ -180,22 +225,17 @@ fun TextHasil(namanya: String, teleponnya: String, jenisnya: String, alamatnya: 
             .fillMaxWidth()
     ){
         Text(
-            text = "Nama : " + namanya,
+            text = "Janis Kelamin : " + jenisnya,
             modifier = Modifier
                 .padding(horizontal = 10.dp, vertical = 4.dp)
         )
         Text(
-            text = "Telepon : " + teleponnya,
-            modifier = Modifier
-                .padding(horizontal = 10.dp, vertical = 5.dp)
-        )
-        Text(
-            text = "Jenis Kelamin : " + jenisnya,
-            modifier = Modifier
-                .padding(horizontal = 10.dp, vertical = 5.dp)
-        )
-        Text(
             text = "Alamat : " + alamatnya,
+            modifier = Modifier
+                .padding(horizontal = 10.dp, vertical = 5.dp)
+        )
+        Text(
+            text = "Email : " + emailnya,
             modifier = Modifier
                 .padding(horizontal = 10.dp, vertical = 5.dp)
         )

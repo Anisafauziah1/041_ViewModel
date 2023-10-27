@@ -1,6 +1,6 @@
 package com.example.practicept5
 
-import androidx.compose.runtime.State
+import android.provider.ContactsContract.CommonDataKinds.Email
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -16,6 +16,8 @@ class CobaViewModel : ViewModel(){
         private set
     var noTelp: String by mutableStateOf("")
         private set
+    var email: String by mutableStateOf("")
+        private set
     var jenisKl: String by mutableStateOf("")
         private set
     var alamat: String by mutableStateOf("")
@@ -23,9 +25,10 @@ class CobaViewModel : ViewModel(){
     private val _uiState = MutableStateFlow(DataForm())
     val uiState: StateFlow<DataForm> = _uiState.asStateFlow()
 
-    fun BacaData(nm: String, tlp: String, jk: String, almt: String){
+    fun BacaData(nm: String, tlp: String, email: String, jk: String, st: String, almt: String){
         namaUsr = nm;
         noTelp = tlp;
+        this.email = email;
         jenisKl = jk;
         alamat = almt;
     }
